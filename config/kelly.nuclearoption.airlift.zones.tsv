@@ -1,0 +1,20 @@
+# Kelly's AIRLIFT recorded landing zones v5
+# Name	MapIdentity	NearestFriendlyAirbase	Faction	CoordinateSpace	DirectionConvention	X	Y	Z	ApproachHeading
+K92 Highway Strip-BDF-LZ-01	Terrain1	K92 Highway Strip	BDF	GLOBAL	APPROACH_HEADING	21931.5	119.1	13730	225
+K92 Highway Strip-BDF-LZ-02	Terrain1	K92 Highway Strip	BDF	GLOBAL	APPROACH_HEADING	21084.9	88.4	10483.6	225
+K92 Highway Strip-BDF-LZ-03	Terrain1	K92 Highway Strip	BDF	GLOBAL	APPROACH_HEADING	18066.5	117.4	13187.9	195
+K92 Highway Strip-PALA-LZ-01	Terrain1	K92 Highway Strip	PALA	GLOBAL	APPROACH_HEADING	17272.2	105	12649.2	290
+K92 Highway Strip-PALA-LZ-02	Terrain1	K92 Highway Strip	PALA	GLOBAL	APPROACH_HEADING	20831.8	89	10505.7	330
+K92 Highway Strip-PALA-LZ-03	Terrain1	K92 Highway Strip	PALA	GLOBAL	APPROACH_HEADING	18295.7	29.6	8667.6	0
+Dustbowl Highway Strip-BDF-LZ-01	Terrain1	Dustbowl Highway Strip	BDF	GLOBAL	APPROACH_HEADING	13142.5	145.9	-6177.2	130
+Dustbowl Highway Strip-BDF-LZ-02	Terrain1	Dustbowl Highway Strip	BDF	GLOBAL	APPROACH_HEADING	10643.9	147	-6595.4	140
+Dustbowl Highway Strip-BDF-LZ-03	Terrain1	Dustbowl Highway Strip	BDF	GLOBAL	APPROACH_HEADING	14480.4	146.1	-6884.6	200
+Dustbowl Highway Strip-PALA-LZ-01	Terrain1	Dustbowl Highway Strip	PALA	GLOBAL	APPROACH_HEADING	14480.4	146.1	-6884.6	290
+Dustbowl Highway Strip-PALA-LZ-02	Terrain1	Dustbowl Highway Strip	PALA	GLOBAL	APPROACH_HEADING	11151.3	141.8	-7298.1	330
+Dustbowl Highway Strip-PALA-LZ-03	Terrain1	Dustbowl Highway Strip	PALA	GLOBAL	APPROACH_HEADING	14065.7	146	-8192.3	330.1
+South Boscali General Aviation-PALA-LZ-01	Terrain1	South Boscali General Aviation	PALA	GLOBAL	APPROACH_HEADING	-9517.4	128.9	-4876.7	330.1
+South Boscali General Aviation-PALA-LZ-02	Terrain1	South Boscali General Aviation	PALA	GLOBAL	APPROACH_HEADING	-10695.3	125.3	-5136.7	0
+South Boscali General Aviation-PALA-LZ-03	Terrain1	South Boscali General Aviation	PALA	GLOBAL	APPROACH_HEADING	-11170.2	135.9	-6467.8	40
+South Boscali General Aviation-BDF-LZ-01	Terrain1	South Boscali General Aviation	BDF	GLOBAL	APPROACH_HEADING	-11170.2	135.9	-6467.8	180
+South Boscali General Aviation-BDF-LZ-02	Terrain1	South Boscali General Aviation	BDF	GLOBAL	APPROACH_HEADING	-9492.2	135.8	-5018.5	170
+South Boscali General Aviation-BDF-LZ-03	Terrain1	South Boscali General Aviation	BDF	GLOBAL	APPROACH_HEADING	-11139	98.9	-4024.6	130

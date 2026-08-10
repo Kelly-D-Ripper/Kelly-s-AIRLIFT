@@ -1,0 +1,45 @@
+name: Bug report
+description: Report an AIRLIFT runtime or compatibility problem
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: AIRLIFT, Nuclear Option, BepInEx and Chimera versions
+    validations:
+      required: true
+  - type: dropdown
+    id: host
+    attributes:
+      label: Host mode
+      options:
+        - Dedicated server
+        - Listen server/local test
+    validations:
+      required: true
+  - type: input
+    id: mission
+    attributes:
+      label: Mission, map and faction
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant BepInEx log excerpt
+      description: Remove passwords, tokens and unrelated player data.
+      render: text

@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>KellysAIRLIFT</AssemblyName>
+    <RootNamespace>KellysAirlift</RootNamespace>
+    <Version>0.14.0</Version>
+    <Deterministic>true</Deterministic>
+    <NuGetAudit>false</NuGetAudit>
+    <RestoreIgnoreFailedSources>true</RestoreIgnoreFailedSources>
+    <BepInExPath Condition="'$(BEPINEX_DIR)' != ''">$(BEPINEX_DIR)</BepInExPath>
+    <BepInExPath Condition="'$(BepInExPath)' == ''">$(NUCLEAR_OPTION_DIR)\BepInEx\core</BepInExPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="artifacts\**\*.cs" />
+    <Compile Remove="backups\**\*.cs" />
+    <Compile Remove="KellysAIRLIFT.Tests\**\*.cs" />
+    <Compile Remove="KellysAIRLIFTOwner\**\*.cs" />
+    <Compile Remove="KellysAIRLIFTPublicUI\**\*.cs" />
+    <Compile Remove="research\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="BepInEx" HintPath="$(BepInExPath)\BepInEx.dll" Private="false" />
+    <Reference Include="0Harmony" HintPath="$(BepInExPath)\0Harmony.dll" Private="false" />
+    <Reference Include="Assembly-CSharp" HintPath="$(NUCLEAR_OPTION_DIR)\NuclearOption_Data\Managed\Assembly-CSharp.dll" Private="false" />
+    <Reference Include="Mirage" HintPath="$(NUCLEAR_OPTION_DIR)\NuclearOption_Data\Managed\Mirage.dll" Private="false" />
+    <Reference Include="UnityEngine" HintPath="$(NUCLEAR_OPTION_DIR)\NuclearOption_Data\Managed\UnityEngine.dll" Private="false" />
+    <Reference Include="UnityEngine.AssetBundleModule" HintPath="$(NUCLEAR_OPTION_DIR)\NuclearOption_Data\Managed\UnityEngine.AssetBundleModule.dll" Private="false" />
+    <Reference Include="UnityEngine.CoreModule" HintPath="$(NUCLEAR_OPTION_DIR)\NuclearOption_Data\Managed\UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Include="UnityEngine.PhysicsModule" HintPath="$(NUCLEAR_OPTION_DIR)\NuclearOption_Data\Managed\UnityEngine.PhysicsModule.dll" Private="false" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,10 @@
+bin/
+obj/
+KellysAIRLIFT.Tests/bin/
+KellysAIRLIFT.Tests/obj/
+artifacts/
+backups/
+*.user
+*.suo
+.vs/
+*.log
