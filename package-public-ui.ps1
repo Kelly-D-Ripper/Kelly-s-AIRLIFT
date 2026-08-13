@@ -25,7 +25,7 @@ $uiProject = Join-Path $projectRoot 'KellysAIRLIFTPublicUI\KellysAIRLIFTPublicUI
 if ($LASTEXITCODE -ne 0) { throw 'Public purchase UI build failed.' }
 
 $artifacts = Join-Path $projectRoot 'artifacts'
-$stage = Join-Path $artifacts 'KellysAIRLIFT-0.14.0-PUBLIC-UI'
+$stage = Join-Path $artifacts 'KellysAIRLIFT-0.14.1-PUBLIC-UI'
 $resolvedProject = [System.IO.Path]::GetFullPath($projectRoot)
 $resolvedStage = [System.IO.Path]::GetFullPath($stage)
 if (-not $resolvedStage.StartsWith($resolvedProject + [System.IO.Path]::DirectorySeparatorChar,
@@ -44,12 +44,12 @@ Copy-Item -LiteralPath (Join-Path $projectRoot 'KellysAIRLIFTPublicUI\README.md'
     -Destination (Join-Path $stage 'README.md')
 
 $install = @(
-    "KELLY'S AIRLIFT 0.14.0 - RAPID PUBLIC PURCHASE UI"
+    "KELLY'S AIRLIFT 0.14.1 - RAPID PUBLIC PURCHASE UI"
     ""
     "Install this optional package on every player client that should see"
     "RAPID Combat Drop under Donate > Vehicles. Do not install it on the server."
     "Choose an enemy-held destination from the dropdown before purchasing."
-    "The server must run Kelly's AIRLIFT 0.14.0 and remains authoritative."
+    "Compatible with Nuclear Option 0.34.2 and Kelly's AIRLIFT server 0.14.0+."
     "A client cannot charge allocation or spawn aircraft with this addon."
 )
 [System.IO.File]::WriteAllLines(
@@ -68,7 +68,7 @@ $manifestLines = Get-ChildItem -LiteralPath $stage -File -Recurse |
 [System.IO.File]::WriteAllLines($manifestPath, $manifestLines,
     [System.Text.UTF8Encoding]::new($false))
 
-$zip = Join-Path $artifacts 'KellysAIRLIFT-0.14.0-PUBLIC-UI-NO034.zip'
+$zip = Join-Path $artifacts 'KellysAIRLIFT-0.14.1-PUBLIC-UI-NO0342.zip'
 if (Test-Path -LiteralPath $zip) { Remove-Item -LiteralPath $zip -Force }
 Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem

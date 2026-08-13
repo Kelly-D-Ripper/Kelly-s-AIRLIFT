@@ -1,8 +1,10 @@
 # Kelly's AIRLIFT Public Purchase UI
 
-Optional client-side companion for Kelly's AIRLIFT 0.14.0. Install it on every
-player client that should see the `RAPID Combat Drop` entry under
-`Donate > Vehicles`.
+Optional client-side companion for Kelly's AIRLIFT server 0.14.0 or newer.
+Public UI 0.14.1 restores the `RAPID Combat Drop` entry after Nuclear Option
+0.34.2 changed convoy pricing, and grows the vehicle donation panel to fit the
+expanded list without overlapping the funds summary. Install it on every
+player client that should see the entry under `Donate > Vehicles`.
 
 Clicking the entry opens a dropdown containing live enemy-held airports. The
 addon sends `/airlift purchase rapid <enemy-airport>` and cannot charge funds

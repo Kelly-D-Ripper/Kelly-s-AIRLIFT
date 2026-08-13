@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,7 +20,7 @@ namespace KellysAirliftPublicUI
     {
         public const string PluginGuid = "kelly.nuclearoption.airlift.publicui";
         public const string PluginName = "Kelly's AIRLIFT Public Purchase UI";
-        public const string PluginVersion = "0.14.0";
+        public const string PluginVersion = "0.14.1";
 
         private static readonly FieldInfo ConvoyPrefabField =
             AccessTools.Field(typeof(ContributeToFaction), "convoySelectPrefab");
@@ -33,13 +34,27 @@ namespace KellysAirliftPublicUI
             AccessTools.Field(typeof(ConvoyPurchaseOption), "button");
         private static readonly FieldInfo OptionHoverField =
             AccessTools.Field(typeof(ConvoyPurchaseOption), "buttonHoverText");
+        private static readonly FieldInfo OptionTextField =
+            AccessTools.Field(typeof(ConvoyPurchaseOption), "text");
+        private static readonly FieldInfo OptionIconField =
+            AccessTools.Field(typeof(ConvoyPurchaseOption), "icon");
+        private static readonly FieldInfo OptionUnavailableField =
+            AccessTools.Field(typeof(ConvoyPurchaseOption), "unavailable");
+        private static readonly FieldInfo OptionLocalPlayerField =
+            AccessTools.Field(typeof(ConvoyPurchaseOption), "localPlayer");
+        private static readonly FieldInfo OptionCostField =
+            AccessTools.Field(typeof(ConvoyPurchaseOption), "cost");
+        private static readonly FieldInfo OptionCanSpawnField =
+            AccessTools.Field(typeof(ConvoyPurchaseOption), "canSpawn");
+        private static readonly FieldInfo OptionWasInteractableField =
+            AccessTools.Field(typeof(ConvoyPurchaseOption), "wasInteractable");
+        private static readonly FieldInfo OptionCompositionField =
+            AccessTools.Field(typeof(ConvoyPurchaseOption), "composition");
 
         private static Plugin _instance;
         private Harmony _harmony;
         private ConfigEntry<bool> _enabled;
         private ConfigEntry<float> _displayedCost;
-        private Faction.ConvoyGroup _displayGroup;
-        private UnitDefinition _displayDefinition;
         private readonly List<Airbase> _enemyAirbases = new List<Airbase>();
         private readonly List<string> _enemyAirportNames = new List<string>();
         private Rect _selectorWindow = new Rect(40f, 80f, 460f, 290f);
@@ -53,6 +68,14 @@ namespace KellysAirliftPublicUI
 
         private sealed class CombatPurchaseMarker : MonoBehaviour { }
 
+        private sealed class DonateLayoutState : MonoBehaviour
+        {
+            internal RectTransform Root;
+            internal Vector2 RootSize;
+            internal Vector3 RootPosition;
+            internal bool Captured;
+        }
+
         private void Awake()
         {
             _instance = this;
@@ -63,7 +86,6 @@ namespace KellysAirliftPublicUI
                 "Displayed client price in Nuclear Option's native million-dollar units; 400 means $400m. The AIRLIFT server independently enforces its configured price.");
             if (Application.isBatchMode) return;
             ValidateApi();
-            BuildDisplayGroup();
             _harmony = new Harmony(PluginGuid);
             _harmony.Patch(AccessTools.Method(typeof(ContributeToFaction),
                     nameof(ContributeToFaction.RefreshVehicleList)),
@@ -75,7 +97,6 @@ namespace KellysAirliftPublicUI
         private void OnDestroy()
         {
             if (_harmony != null) _harmony.UnpatchSelf();
-            if (_displayDefinition != null) Destroy(_displayDefinition);
             _selectorVisible = false;
             if (_instance == this) _instance = null;
         }
@@ -84,36 +105,21 @@ namespace KellysAirliftPublicUI
         {
             if (ConvoyPrefabField == null || ConvoyBackgroundField == null
                 || HoverTextField == null || LocalPlayerField == null
-                || OptionButtonField == null || OptionHoverField == null)
+                || OptionButtonField == null || OptionHoverField == null
+                || OptionTextField == null || OptionIconField == null
+                || OptionUnavailableField == null || OptionLocalPlayerField == null
+                || OptionCostField == null || OptionCanSpawnField == null
+                || OptionWasInteractableField == null
+                || OptionCompositionField == null)
                 throw new MissingFieldException(
                     "Nuclear Option 0.34 Donate/convoy UI fields changed.");
-            if (AccessTools.Method(typeof(ConvoyPurchaseOption),
-                    nameof(ConvoyPurchaseOption.Initialize)) == null)
-                throw new MissingMethodException("ConvoyPurchaseOption.Initialize");
-        }
-
-        private void BuildDisplayGroup()
-        {
-            float cost = Mathf.Clamp(_displayedCost.Value, 1f, 1000f);
-            _displayDefinition = ScriptableObject.CreateInstance<UnitDefinition>();
-            _displayDefinition.name = "KellysAIRLIFT_RAPID_DisplayOnly";
-            _displayDefinition.jsonKey = "KellysAIRLIFT_RAPID_DisplayOnly";
-            _displayDefinition.unitName =
-                "2x Type-12, 2x AFV6 IFV, 2x AFV6 AA, 2x FRCV-105 LT";
-            _displayDefinition.value = cost;
-            _displayGroup = new Faction.ConvoyGroup {
-                Name = "RAPID Combat Drop",
-                Constituents = new List<Faction.ConvoyUnit> {
-                    new Faction.ConvoyUnit { Type = _displayDefinition, Count = 1 }
-                }
-            };
         }
 
         private static void RefreshVehicleListPostfix(ContributeToFaction __instance)
         {
             Plugin plugin = _instance;
             if (plugin == null || Application.isBatchMode || !plugin._enabled.Value
-                || __instance == null || plugin._displayGroup == null)
+                || __instance == null)
                 return;
             try { plugin.AddPurchaseButton(__instance); }
             catch (Exception exception)
@@ -145,7 +151,28 @@ namespace KellysAirliftPublicUI
                 return;
             }
             if (hoverText != null) option.SetButtonHoverText(hoverText);
-            option.Initialize(menu, player, _displayGroup);
+            float cost = Mathf.Clamp(_displayedCost.Value, 1f, 1000f);
+            TMP_Text optionText = OptionTextField.GetValue(option) as TMP_Text;
+            if (optionText != null)
+                optionText.text = "RAPID Combat Drop (" + UnitConverter.ValueReading(cost) + ")";
+            Image optionIcon = OptionIconField.GetValue(option) as Image;
+            if (optionIcon != null)
+            {
+                Image nativeIcon = background.GetComponentsInChildren<ConvoyPurchaseOption>(true)
+                    .Where(candidate => candidate != null && candidate != option)
+                    .Select(candidate => OptionIconField.GetValue(candidate) as Image)
+                    .FirstOrDefault(candidate => candidate != null && candidate.sprite != null);
+                if (nativeIcon != null) optionIcon.sprite = nativeIcon.sprite;
+            }
+            GameObject unavailable = OptionUnavailableField.GetValue(option) as GameObject;
+            if (unavailable != null) unavailable.SetActive(false);
+            OptionLocalPlayerField.SetValue(option, player);
+            OptionCostField.SetValue(option, cost);
+            OptionCanSpawnField.SetValue(option, true);
+            OptionWasInteractableField.SetValue(option, true);
+            OptionCompositionField.SetValue(option,
+                "\n5x MC-260 Chimera\n2x Type-12 MBT\n2x AFV6 IFV"
+                + "\n2x AFV6 AA\n2x FRCV-105 light tank");
             ShowHoverText optionHover = OptionHoverField.GetValue(option) as ShowHoverText;
             if (optionHover != null)
                 optionHover.SetText("Request five MC-260 Chimeras carrying eight combat vehicles. "
@@ -160,6 +187,78 @@ namespace KellysAirliftPublicUI
             }
             button.onClick = new Button.ButtonClickedEvent();
             button.onClick.AddListener(() => OpenPurchaseSelector(menu, player));
+            button.interactable = player.Allocation >= cost;
+            RepairDonateLayout(menu, background);
+        }
+
+        private static void RepairDonateLayout(ContributeToFaction menu, Transform optionContainer)
+        {
+            RectTransform root = menu.transform as RectTransform;
+            if (root == null || optionContainer == null) return;
+
+            DonateLayoutState state = menu.GetComponent<DonateLayoutState>();
+            if (state == null) state = menu.gameObject.AddComponent<DonateLayoutState>();
+            if (!state.Captured)
+            {
+                state.Root = root;
+                state.RootSize = root.sizeDelta;
+                state.RootPosition = root.position;
+                state.Captured = true;
+            }
+            else if (state.Root == root)
+            {
+                root.sizeDelta = state.RootSize;
+                root.position = state.RootPosition;
+            }
+
+            Canvas.ForceUpdateCanvases();
+            RectTransform[] rows = optionContainer.GetComponentsInChildren<ConvoyPurchaseOption>(true)
+                .Where(option => option != null && option.gameObject.activeSelf)
+                .Select(option => option.transform as RectTransform)
+                .Where(rect => rect != null).ToArray();
+            if (rows.Length == 0) return;
+
+            FieldInfo currentFundsField = AccessTools.Field(typeof(ContributeToFaction), "currentFunds");
+            TMP_Text currentFunds = currentFundsField == null
+                ? null : currentFundsField.GetValue(menu) as TMP_Text;
+            if (currentFunds == null) return;
+
+            float lastRowBottom = rows.Min(WorldBottom);
+            float fundsTop = WorldTop(currentFunds.rectTransform);
+            float requiredGrowth = Mathf.Max(0f, fundsTop - lastRowBottom + 14f);
+            if (requiredGrowth < 1f) return;
+
+            float availableGrowth = Mathf.Max(0f, Screen.height - 32f - root.rect.height);
+            float growth = Mathf.Min(requiredGrowth, availableGrowth);
+            if (growth < 1f) return;
+
+            float oldTop = WorldTop(root);
+            Vector2 size = root.sizeDelta;
+            size.y += growth;
+            root.sizeDelta = size;
+            Canvas.ForceUpdateCanvases();
+            Vector3 position = root.position;
+            position.y += oldTop - WorldTop(root);
+            root.position = position;
+            Canvas.ForceUpdateCanvases();
+            if (_instance != null)
+                _instance.Logger.LogInfo("AIRLIFT repaired Nuclear Option 0.34.2 Donate layout: "
+                    + rows.Length + " vehicle rows; panel grew "
+                    + growth.ToString("F0", CultureInfo.InvariantCulture) + " UI units.");
+        }
+
+        private static float WorldTop(RectTransform rect)
+        {
+            Vector3[] corners = new Vector3[4];
+            rect.GetWorldCorners(corners);
+            return corners.Max(corner => corner.y);
+        }
+
+        private static float WorldBottom(RectTransform rect)
+        {
+            Vector3[] corners = new Vector3[4];
+            rect.GetWorldCorners(corners);
+            return corners.Min(corner => corner.y);
         }
 
         private void OpenPurchaseSelector(ContributeToFaction menu, Player player)
