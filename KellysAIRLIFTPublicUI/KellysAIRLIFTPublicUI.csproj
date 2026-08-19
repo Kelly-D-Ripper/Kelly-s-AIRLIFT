@@ -5,7 +5,7 @@
     <Nullable>disable</Nullable>
     <AssemblyName>KellysAIRLIFTPublicUI</AssemblyName>
     <RootNamespace>KellysAirliftPublicUI</RootNamespace>
-    <Version>0.14.1</Version>
+    <Version>0.17.1</Version>
     <Deterministic>true</Deterministic>
     <NuGetAudit>false</NuGetAudit>
     <RestoreIgnoreFailedSources>true</RestoreIgnoreFailedSources>
@@ -20,8 +20,10 @@
     <Reference Include="UnityEngine" HintPath="$(NUCLEAR_OPTION_DIR)\NuclearOption_Data\Managed\UnityEngine.dll" Private="false" />
     <Reference Include="UnityEngine.CoreModule" HintPath="$(NUCLEAR_OPTION_DIR)\NuclearOption_Data\Managed\UnityEngine.CoreModule.dll" Private="false" />
     <Reference Include="UnityEngine.IMGUIModule" HintPath="$(NUCLEAR_OPTION_DIR)\NuclearOption_Data\Managed\UnityEngine.IMGUIModule.dll" Private="false" />
+    <Reference Include="UnityEngine.InputLegacyModule" HintPath="$(NUCLEAR_OPTION_DIR)\NuclearOption_Data\Managed\UnityEngine.InputLegacyModule.dll" Private="false" />
     <Reference Include="UnityEngine.UIModule" HintPath="$(NUCLEAR_OPTION_DIR)\NuclearOption_Data\Managed\UnityEngine.UIModule.dll" Private="false" />
     <Reference Include="UnityEngine.UI" HintPath="$(NUCLEAR_OPTION_DIR)\NuclearOption_Data\Managed\UnityEngine.UI.dll" Private="false" />
     <Reference Include="Unity.TextMeshPro" HintPath="$(NUCLEAR_OPTION_DIR)\NuclearOption_Data\Managed\Unity.TextMeshPro.dll" Private="false" />
   </ItemGroup>
 </Project>
+
